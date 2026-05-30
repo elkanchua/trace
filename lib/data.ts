@@ -124,6 +124,7 @@ export function createGeneratedProduct(
     id: "generated-product",
     name: productName,
     status: "Discovery",
+    phase: 3,
     summary:
       "Generated from a Notion PRD with starter product, engineering, and design artifacts ready for the team to fill in.",
     myRole: "PM",

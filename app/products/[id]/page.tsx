@@ -130,7 +130,7 @@ export default function ProductDetailPage({
         <div className="mt-5">
           <button
             onClick={handleFindConflicts}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-ink/90"
           >
             <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
