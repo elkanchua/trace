@@ -76,7 +76,7 @@ export default function MyRolePage() {
         <div className="space-y-5">
           <div className="rounded-2xl border border-line bg-white p-5 shadow-card">
             <h2 className="text-sm font-semibold text-ink">Role progress</h2>
-            <p className="text-xs text-subtle">Atlas Mobile — Offline Mode</p>
+            <p className="text-xs text-subtle">Shop — In-App Commerce</p>
             <div className="mt-4 space-y-3">
               {ROLE_PROGRESS.map((r) => (
                 <div key={r.role}>
@@ -95,9 +95,7 @@ export default function MyRolePage() {
           <div className="rounded-2xl border border-line bg-white shadow-card">
             <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
               <h2 className="text-sm font-semibold text-ink">Recent activity</h2>
-              <Link href="/activity" className="text-xs font-medium text-brand-600 hover:text-brand-700">
-                View all
-              </Link>
+              <span className="text-xs text-subtle">across all products</span>
             </div>
             <ul className="px-5 py-1">
               {activity.slice(0, 5).map((a) => (
