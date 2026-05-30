@@ -1,4 +1,4 @@
-import { currentUser } from "@/lib/data";
+import { currentUser, ROLE_LABEL } from "@/lib/data";
 import { PageHeader, Avatar } from "@/components/ui";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -28,7 +28,7 @@ export default function SettingsPage() {
       <PageHeader title="Settings" subtitle="Manage your profile, role, and notifications." />
 
       <div className="space-y-5">
-        <section className="rounded-2xl border border-line bg-white shadow-card">
+        <section className="rounded-2xl border border-white/60 bg-white/70 shadow-card backdrop-blur-md">
           <h2 className="border-b border-line px-5 py-3.5 text-sm font-semibold text-ink">Profile</h2>
           <div className="flex items-center gap-4 px-5 py-5">
             <Avatar name={currentUser.name} color="bg-brand-600" />
@@ -43,7 +43,7 @@ export default function SettingsPage() {
           <div className="divide-y divide-line border-t border-line">
             <Row label="Primary role">
               <span className="rounded-lg border border-line bg-canvas px-3 py-1.5 text-sm font-medium text-ink">
-                {currentUser.role}
+                {ROLE_LABEL[currentUser.role]}
               </span>
             </Row>
             <Row label="Default product view">
@@ -52,7 +52,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-line bg-white shadow-card">
+        <section className="rounded-2xl border border-white/60 bg-white/70 shadow-card backdrop-blur-md">
           <h2 className="border-b border-line px-5 py-3.5 text-sm font-semibold text-ink">Notifications</h2>
           <div className="divide-y divide-line">
             <Row label="New conflict detected on my products"><Toggle on /></Row>
@@ -62,7 +62,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-line bg-white shadow-card">
+        <section className="rounded-2xl border border-white/60 bg-white/70 shadow-card backdrop-blur-md">
           <h2 className="border-b border-line px-5 py-3.5 text-sm font-semibold text-ink">Workspace</h2>
           <div className="divide-y divide-line">
             <Row label="Team">

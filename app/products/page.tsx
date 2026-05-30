@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { products, TEAM_META, TEAMS, PHASE_META } from "@/lib/data";
+import { products, TEAM_META, TEAMS, PHASE_META, ROLE_LABEL } from "@/lib/data";
 import { PageHeader, StatusBadge, Avatar } from "@/components/ui";
 
 export default function ProductsPage() {
@@ -23,7 +23,7 @@ export default function ProductsPage() {
           <Link
             key={p.id}
             href={`/products/${p.id}`}
-            className="group flex flex-col rounded-2xl border border-line bg-white p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
+            className="group flex flex-col rounded-2xl border border-white/60 bg-white/70 p-5 shadow-card backdrop-blur-md transition-all hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-lift"
           >
             <div className="flex items-start justify-between gap-3">
               <h3 className="text-base font-semibold leading-snug text-ink">{p.name}</h3>
@@ -45,11 +45,11 @@ export default function ProductsPage() {
               </div>
               <div className="flex items-center gap-3 text-xs">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2 py-0.5 font-medium text-brand-700">
-                  Your role · {p.myRole}
+                  Your role · {ROLE_LABEL[p.myRole]}
                 </span>
                 {p.conflicts > 0 ? (
-                  <span className="inline-flex items-center gap-1.5 font-medium text-rose-600">
-                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                  <span className="inline-flex items-center gap-1.5 font-medium text-[#b23a1c]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#d94e2b]" />
                     {p.conflicts} conflict{p.conflicts > 1 ? "s" : ""}
                   </span>
                 ) : (

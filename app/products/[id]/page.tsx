@@ -13,11 +13,13 @@ import {
   TEAMS,
   TEAM_META,
   PHASE_META,
+  ROLE_LABEL,
 } from "@/lib/data";
 
 import { StatusBadge, Avatar, SeverityBadge } from "@/components/ui";
-import { FileTile } from "@/components/FileTile";
 import { FileTypeIcon } from "@/components/icons";
+import { BlockerBoard } from "@/components/BlockerBoard";
+import { KnowledgeBase } from "@/components/KnowledgeBase";
 
 const shortName = (name: string) => (name.includes(" / ") ? name.split(" / ").pop()! : name);
 
@@ -91,12 +93,12 @@ export default function ProductDetailPage({
               <Avatar key={m.name} name={m.name} color={m.color} size="sm" />
             ))}
           </div>
-          <span className="text-xs text-subtle">Your role · {product.myRole}</span>
+          <span className="text-xs text-subtle">Your role · {ROLE_LABEL[product.myRole]}</span>
         </div>
       </div>
 
       {/* Phase tracker */}
-      <div className="mt-5 flex flex-wrap items-center gap-2.5 rounded-xl border border-line bg-white p-3 shadow-card">
+      <div className="mt-5 flex flex-wrap items-center gap-2.5 rounded-xl border border-white/60 bg-white/70 p-3 shadow-card backdrop-blur-md">
         <span className="rounded-full bg-ink px-2.5 py-1 text-[11px] font-semibold text-white">
           {PHASE_META[product.phase].label}
         </span>
@@ -119,6 +121,9 @@ export default function ProductDetailPage({
           })}
         </div>
       </div>
+
+      {/* Blocker board */}
+      <BlockerBoard productId={product.id} />
 
       {/* Find Conflicts button */}
       {productConflicts.length > 0 && !conflictsRevealed && !loading && (
@@ -149,9 +154,9 @@ export default function ProductDetailPage({
 
       {/* Conflict strip — only shown after Find Conflicts completes */}
       {conflictsRevealed && productConflicts.length > 0 && (
-        <div className="mt-5 rounded-xl border border-rose-200 bg-rose-50/60 p-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-rose-700">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-600">!</span>
+        <div className="mt-5 rounded-xl border border-line bg-black/[0.035] p-4 backdrop-blur-md">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#b23a1c]">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d94e2b]/15 text-[#b23a1c]">!</span>
             {productConflicts.length} cross-surface conflict
             {productConflicts.length > 1 ? "s" : ""} detected
           </div>
@@ -193,44 +198,8 @@ export default function ProductDetailPage({
         </div>
       )}
 
-      {/* Knowledge Base */}
-      <div className="mt-8 mb-4 flex items-center gap-2">
-        <h2 className="text-base font-semibold text-ink">Knowledge Base</h2>
-        <span className="text-sm text-subtle">· the shared source of truth, by team</span>
-      </div>
-
-      <div className="space-y-5">
-        {TEAMS.map((team) => {
-          const files = product.files.filter((f) => f.team === team);
-          if (files.length === 0) return null;
-          const meta = TEAM_META[team];
-          const owners = Array.from(new Set(files.map((f) => f.owner)));
-          return (
-            <section key={team} className="rounded-2xl border border-line bg-white p-4 shadow-card">
-              <div className="mb-3 flex items-center gap-2.5 px-1">
-                <span className={`h-2.5 w-2.5 rounded-full ${meta.dot}`} />
-                <h3 className="text-sm font-semibold text-ink">{meta.label} team</h3>
-                <span className="text-xs text-subtle">· {meta.blurb}</span>
-                <div className="ml-auto flex items-center gap-3">
-                  <div className="flex -space-x-1.5">
-                    {owners.map((o) => (
-                      <Avatar key={o} name={o} size="sm" />
-                    ))}
-                  </div>
-                  <span className="rounded-full bg-canvas px-2 py-0.5 text-[11px] font-medium text-subtle ring-1 ring-inset ring-line">
-                    {files.length} file{files.length > 1 ? "s" : ""}
-                  </span>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {files.map((f) => (
-                  <FileTile key={f.name} file={f} highlighted={highlightedFiles.has(f.name)} />
-                ))}
-              </div>
-            </section>
-          );
-        })}
-      </div>
+      {/* Knowledge Base — team toggles */}
+      <KnowledgeBase product={product} highlightedFiles={highlightedFiles} />
 
       {/* Activity (per product) */}
       <div className="mt-8 mb-4 flex items-center gap-2">

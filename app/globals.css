@@ -4,9 +4,17 @@
 
 html,
 body {
-  background: #fafafa;
   color: #0f1115;
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 760px at 0% 0%, #ededf2 0%, rgba(237, 237, 242, 0) 58%),
+    radial-gradient(1000px 720px at 100% 100%, #e2e2ea 0%, rgba(226, 226, 234, 0) 55%),
+    linear-gradient(135deg, #d9d9e0 0%, #ebebee 55%, #f3f3f6 100%);
+  background-attachment: fixed;
 }
 
 * {

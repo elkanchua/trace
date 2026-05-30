@@ -57,7 +57,7 @@ export function StatusBadge({ status }: { status: ProductStatus }) {
 }
 
 const SEV: Record<string, { chip: string; dot: string }> = {
-  High: { chip: "bg-rose-50 text-rose-700 ring-rose-200", dot: "bg-rose-500" },
+  High: { chip: "bg-[#d94e2b]/10 text-[#b23a1c] ring-[#d94e2b]/30", dot: "bg-[#d94e2b]" },
   Medium: { chip: "bg-amber-50 text-amber-700 ring-amber-200", dot: "bg-amber-500" },
   Low: { chip: "bg-slate-100 text-slate-600 ring-slate-200", dot: "bg-slate-400" },
 };

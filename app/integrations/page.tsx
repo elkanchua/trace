@@ -12,7 +12,7 @@ export default function IntegrationsPage() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {integrations.map((i) => (
-          <div key={i.name} className="flex items-center gap-3.5 rounded-2xl border border-line bg-white p-4 shadow-card">
+          <div key={i.name} className="flex items-center gap-3.5 rounded-2xl border border-white/60 bg-white/70 p-4 shadow-card backdrop-blur-md">
             <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-line bg-white">
               <FileTypeIcon type={i.type} className="h-6 w-6 text-ink" />
             </div>

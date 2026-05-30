@@ -77,7 +77,7 @@ export function ChatPanel({
   }
 
   return (
-    <aside className="flex h-full w-[360px] flex-shrink-0 flex-col border-l border-line bg-white">
+    <aside className="flex h-full w-[360px] flex-shrink-0 flex-col border-l border-white/50 bg-white/40 backdrop-blur-xl">
       <div className="flex items-center gap-2.5 border-b border-line px-4 py-3.5">
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-violet-600 text-white">
           <SparkIcon className="h-4 w-4" />

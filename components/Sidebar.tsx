@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { products, currentUser } from "@/lib/data";
+import { products, currentUser, ROLE_LABEL } from "@/lib/data";
 import { NavIcon } from "./icons";
 import { Avatar } from "./ui";
 
@@ -26,7 +26,7 @@ export function Sidebar({
       { href: "/integrations", icon: "integrations" as const },
     ];
     return (
-      <aside className="flex h-full w-[60px] flex-shrink-0 flex-col items-center border-r border-line bg-white py-4">
+      <aside className="flex h-full w-[60px] flex-shrink-0 flex-col items-center border-r border-white/50 bg-white/30 py-4 backdrop-blur-xl">
         <button
           onClick={onToggle}
           title="Expand sidebar"
@@ -72,7 +72,7 @@ export function Sidebar({
     }`;
 
   return (
-    <aside className="flex h-full w-60 flex-shrink-0 flex-col border-r border-line bg-white">
+    <aside className="flex h-full w-60 flex-shrink-0 flex-col border-r border-white/50 bg-white/30 backdrop-blur-xl">
       <div className="flex items-center gap-2.5 px-5 py-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/trace-logo.jpeg" alt="Trace" className="h-7 w-7 rounded-lg object-cover" />
@@ -115,7 +115,7 @@ export function Sidebar({
                 >
                   <span className="flex-1 truncate">{p.name.split(" — ")[0]}</span>
                   {p.conflicts > 0 && (
-                    <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-100 px-1 text-[10px] font-semibold text-rose-700">
+                    <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#d94e2b]/15 px-1 text-[10px] font-semibold text-[#b23a1c]">
                       {p.conflicts}
                     </span>
                   )}
@@ -140,7 +140,7 @@ export function Sidebar({
           <Avatar name={currentUser.name} color="bg-brand-600" />
           <div className="min-w-0 leading-tight">
             <div className="truncate text-sm font-medium text-ink">{currentUser.name}</div>
-            <div className="text-xs text-subtle">{currentUser.role}</div>
+            <div className="text-xs text-subtle">{ROLE_LABEL[currentUser.role]}</div>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { AppShell } from "@/components/AppShell";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "LoopIn — Product Context Platform",
+  title: "Trace — Product Context Platform",
   description:
     "One place where PRDs, design, code, and conversations stay in sync.",
 };

@@ -14,6 +14,33 @@ export type ProductStatus = "Discovery" | "In Progress" | "Shipped";
 
 export type Role = "PM" | "Designer" | "Engineer" | "Legal";
 
+export const ROLE_LABEL: Record<Role, string> = {
+  PM: "Product Manager",
+  Designer: "Designer",
+  Engineer: "Engineer",
+  Legal: "Legal",
+};
+
+export const ROLES: Role[] = ["PM", "Designer", "Engineer", "Legal"];
+
+export const ROLE_TEAM: Record<Role, Team> = {
+  PM: "product",
+  Designer: "design",
+  Engineer: "dev",
+  Legal: "legal",
+};
+
+// Each role view is one specific person's to-do list.
+export const ROLE_PERSON: Record<Role, string> = {
+  PM: "Elkan Chua",
+  Designer: "Devon Clarke",
+  Engineer: "Marcus Liu",
+  Legal: "Nadia Rahman",
+};
+
+// The red used across conflicts.
+export const CONFLICT_RED = "#d94e2b";
+
 export type Phase = 1 | 2 | 3 | 4;
 
 export interface KbFile {
@@ -45,12 +72,13 @@ export interface Product {
 
 export const TEAM_META: Record<
   Team,
-  { label: string; blurb: string; accent: string; dot: string }
+  { label: string; blurb: string; accent: string; dot: string; card: string }
 > = {
-  product: { label: "Product", blurb: "Briefs, specs & research", accent: "text-violet-700", dot: "bg-violet-500" },
-  design: { label: "Design", blurb: "Flows, mocks & inspiration", accent: "text-pink-700", dot: "bg-pink-500" },
-  dev: { label: "Engineering", blurb: "Code, PRs & architecture", accent: "text-emerald-700", dot: "bg-emerald-500" },
-  legal: { label: "Legal", blurb: "Policy, compliance & review", accent: "text-amber-700", dot: "bg-amber-500" },
+  // `card` tints the team card with the colour from each team's tile.
+  product: { label: "Product", blurb: "Briefs, specs & research", accent: "text-[#7c6f00]", dot: "bg-[#d6d24f]", card: "border-[#d8d45a]/60 bg-[#e8e56c]/55" },
+  design: { label: "Design", blurb: "Flows, mocks & inspiration", accent: "text-[#b03a78]", dot: "bg-[#e07bb0]", card: "border-[#db86b0]/55 bg-[#e89abf]/45" },
+  dev: { label: "Engineering", blurb: "Code, PRs & architecture", accent: "text-[#b2531f]", dot: "bg-[#dd7e48]", card: "border-[#d27d4b]/55 bg-[#e08a56]/45" },
+  legal: { label: "Legal", blurb: "Policy, compliance & review", accent: "text-[#357a55]", dot: "bg-[#7fb193]", card: "border-[#7fb193]/55 bg-[#93c0a2]/55" },
 };
 
 export const TEAMS: Team[] = ["product", "design", "dev", "legal"];
@@ -673,6 +701,110 @@ export function productActivity(productId: string): ActivityItem[] {
   return activity.filter((a) => a.productId === productId);
 }
 
+// ---------- Blockers (who is blocked & how to unblock) ----------
+export interface Blocker {
+  productId: string;
+  role: Role;
+  person: string;
+  waitingFor: string;
+  nextAction: string;
+  actionLabel: string;
+}
+
+export const blockers: Blocker[] = [
+  // AI Dubbing
+  {
+    productId: "ai-dubbing",
+    role: "PM",
+    person: "Priya Natarajan",
+    waitingFor: "Legal review of voice-cloning consent",
+    nextAction: "Book a consent review with Legal",
+    actionLabel: "Message Legal",
+  },
+  // Direct Messages
+  {
+    productId: "direct-messages",
+    role: "PM",
+    person: "Priya Natarajan",
+    waitingFor: "Voice-notes UI from design",
+    nextAction: "Confirm voice notes are in scope",
+    actionLabel: "Send reminder",
+  },
+  {
+    productId: "direct-messages",
+    role: "Designer",
+    person: "Devon Clarke",
+    waitingFor: "Final voice-notes requirements",
+    nextAction: "Design record & playback states",
+    actionLabel: "Open Figma",
+  },
+  // Live Gifts
+  {
+    productId: "live-gifts",
+    role: "PM",
+    person: "Hannah Weiss",
+    waitingFor: "Leaderboard backend from eng",
+    nextAction: "Confirm scope in the eng sync",
+    actionLabel: "Send reminder",
+  },
+  {
+    productId: "live-gifts",
+    role: "Designer",
+    person: "Devon Clarke",
+    waitingFor: "Combo-animation sign-off",
+    nextAction: "Review combo specs with eng",
+    actionLabel: "Open Figma",
+  },
+  {
+    productId: "live-gifts",
+    role: "Engineer",
+    person: "Marcus Liu",
+    waitingFor: "Leaderboard event schema",
+    nextAction: "Emit leaderboard events from GiftStream",
+    actionLabel: "Open PR",
+  },
+  // Shop
+  {
+    productId: "shop",
+    role: "PM",
+    person: "Owen Bradley",
+    waitingFor: "Legal sign-off on age policy",
+    nextAction: "Align the age-gate approach in sync",
+    actionLabel: "Join sync",
+  },
+  {
+    productId: "shop",
+    role: "Designer",
+    person: "Devon Clarke",
+    waitingFor: "Final refund-terms copy",
+    nextAction: "Add refund terms to checkout",
+    actionLabel: "Open Figma",
+  },
+  {
+    productId: "shop",
+    role: "Engineer",
+    person: "Raj Patel",
+    waitingFor: "Age-verification decision",
+    nextAction: "Implement the age gate in PaymentIntent",
+    actionLabel: "Join sync",
+  },
+  {
+    productId: "shop",
+    role: "Legal",
+    person: "Nadia Rahman",
+    waitingFor: "Restricted-category list confirmation",
+    nextAction: "Finalize the restricted-goods policy",
+    actionLabel: "Open policy",
+  },
+];
+
+export function productBlockers(productId: string): Blocker[] {
+  const order = { PM: 0, Designer: 1, Engineer: 2, Legal: 3 } as const;
+  return blockers
+    .filter((b) => b.productId === productId)
+    .sort((a, b) => order[a.role] - order[b.role]);
+}
+
 // ---------- Integrations ----------
 export interface Integration {
   name: string;
@@ -695,19 +827,116 @@ export const integrations: Integration[] = [
 export interface NextStep {
   id: string;
   role: Role;
+  owner: string;
   title: string;
+  detail: string;
   productId: string;
   due: string;
   priority: "High" | "Medium" | "Low";
+  files: string[]; // relevant knowledge-base files to open
 }
 
 export const nextSteps: NextStep[] = [
-  { id: "n1", role: "PM", title: "Resolve age-verification gap before Shop launch", productId: "shop", due: "Due in 2h", priority: "High" },
-  { id: "n2", role: "Legal", title: "Sign off on restricted-goods age policy", productId: "shop", due: "Due in 4h", priority: "High" },
-  { id: "n3", role: "Engineer", title: "Emit leaderboard events from GiftStream", productId: "live-gifts", due: "Due tomorrow", priority: "Medium" },
-  { id: "n4", role: "Designer", title: "Design the voice-notes flow in DM 2.0", productId: "direct-messages", due: "Due in 2 days", priority: "Medium" },
-  { id: "n5", role: "PM", title: "Finalize the AI-dubbing voice-consent model", productId: "ai-dubbing", due: "Due in 4 days", priority: "Low" },
+  {
+    id: "n1",
+    role: "PM",
+    owner: "Elkan Chua",
+    title: "Decide the age-gate approach for checkout",
+    detail:
+      "Restricted categories need verified-age checkout, but the payment code and Figma checkout have no age gate. Pick checkout-level vs account-level verification, then open the eng + design tickets.",
+    productId: "shop",
+    due: "Due in 2h",
+    priority: "High",
+    files: ["Age & Restricted Goods Review", "checkout-service / PaymentIntent.ts", "Checkout Flow"],
+  },
+  {
+    id: "n2",
+    role: "Legal",
+    owner: "Nadia Rahman",
+    title: "Sign off on the restricted-goods age policy",
+    detail:
+      "Confirm the final list of age-restricted categories and the minimum acceptable verification method so Engineering can build the gate.",
+    productId: "shop",
+    due: "Due in 4h",
+    priority: "High",
+    files: ["Age & Restricted Goods Review", "Minors & Payments Policy"],
+  },
+  {
+    id: "n3",
+    role: "Designer",
+    owner: "Devon Clarke",
+    title: "Add refund terms to the checkout flow",
+    detail:
+      "Seller-compliance requires refund and return terms to be visible before payment. Add them to the Checkout Flow frames and the cart.",
+    productId: "shop",
+    due: "Due in 1 day",
+    priority: "Medium",
+    files: ["Checkout Flow", "Seller Compliance Checklist"],
+  },
+  {
+    id: "n4",
+    role: "Engineer",
+    owner: "Marcus Liu",
+    title: "Emit leaderboard events from GiftStream",
+    detail:
+      "GiftStream.ts streams individual gift events but never aggregates them. Emit periodic top-gifter leaderboard events so the designed overlay can render.",
+    productId: "live-gifts",
+    due: "Due tomorrow",
+    priority: "High",
+    files: ["live-service / GiftStream.ts", "Live Gifts PRD"],
+  },
+  {
+    id: "n5",
+    role: "Engineer",
+    owner: "Marcus Liu",
+    title: "Wire combo gift animations on Android",
+    detail:
+      "GiftRenderer.kt renders a single icon for combo/streak gifts. Implement the escalating burst effects from the Gifting UI spec.",
+    productId: "live-gifts",
+    due: "Due in 2 days",
+    priority: "Medium",
+    files: ["android-live / GiftRenderer.kt", "Live — Gifting UI"],
+  },
+  {
+    id: "n6",
+    role: "Designer",
+    owner: "Devon Clarke",
+    title: "Design the voice-notes flow",
+    detail:
+      "The PRD lists voice notes as a launch feature but Figma has no record/playback UI. Design the record, preview, send, and playback states.",
+    productId: "direct-messages",
+    due: "Due in 2 days",
+    priority: "Medium",
+    files: ["DM 2.0 — Flows", "Direct Messages 2.0 PRD"],
+  },
+  {
+    id: "n7",
+    role: "PM",
+    owner: "Elkan Chua",
+    title: "Finalize the voice-consent model",
+    detail:
+      "Decide how creators consent to voice cloning and which 10 languages launch first. Loop in Legal early given the consent implications.",
+    productId: "ai-dubbing",
+    due: "Due in 4 days",
+    priority: "Low",
+    files: ["AI Auto-Dubbing PRD"],
+  },
 ];
+
+const PRIORITY_RANK = { High: 0, Medium: 1, Low: 2 } as const;
+
+// Products that have next steps, ordered by their most urgent step.
+export function nextStepsByProduct(): { product: Product; steps: NextStep[] }[] {
+  return products
+    .map((product) => ({
+      product,
+      steps: nextSteps
+        .filter((s) => s.productId === product.id)
+        .sort((a, b) => PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]),
+    }))
+    .filter((g) => g.steps.length > 0)
+    .sort((a, b) => PRIORITY_RANK[a.steps[0].priority] - PRIORITY_RANK[b.steps[0].priority]);
+}
 
 export const ROLE_PROGRESS: { role: Role; label: string; pct: number; state: string }[] = [
   { role: "PM", label: "PM", pct: 85, state: "On track" },
