@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mike</title>
+<style>
+  :root {
+    --border: #ececec;
+    --text: #1e1e1e;
+    --muted: #8a8a8a;
+    --hover: #f5f5f5;
+    --active: #f0f0f0;
+    --bubble: #f4f4f4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: #ffffff;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 196px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 13px 10px;
+    background: #ffffff;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 6px 16px;
+  }
+
+  .brand-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .brand-mark { font-size: 16px; line-height: 1; }
+
+  .brand-name {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .panel-icon {
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+  }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 9px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+    transition: background 0.12s ease;
+  }
+
+  .nav-item:hover { background: var(--hover); }
+  .nav-item.active { background: var(--active); }
+  .nav-item svg { color: #4a4a4a; flex-shrink: 0; width: 14px; height: 14px; }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 9px 4px;
+    margin-top: 16px;
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 9px;
+    border-radius: 7px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .history-item:hover { background: var(--hover); }
+  .history-item .dots { color: var(--muted); }
+
+  /* ---------- Main ---------- */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    padding: 20px 28px 56px;
+  }
+
+  .conversation { width: 100%; max-width: 644px; }
+
+  .msg-user {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+  }
+
+  .bubble {
+    background: var(--bubble);
+    border-radius: 10px;
+    padding: 11px 15px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 448px;
+  }
+
+  .spinner { font-size: 15px; margin-bottom: 15px; }
+
+  .status-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #444;
+    margin-bottom: 17px;
+    cursor: pointer;
+  }
+  .status-card:hover { background: #fafafa; }
+  .status-card .chev { color: var(--muted); }
+
+  .para {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    color: #1e1e1e;
+  }
+
+  .work-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin-bottom: 17px;
+  }
+
+  .work-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 11px;
+  }
+
+  .work-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0 6px 3px;
+    font-size: 11px;
+    position: relative;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot.red { background: #e0564f; }
+  .dot.grey { background: #cfcfcf; }
+  .dot.green { background: #46b06a; }
+
+  .step-strong { font-weight: 600; color: #1e1e1e; }
+  .step-muted { color: var(--muted); }
+</style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-left">
+        <span class="brand-mark">✳️</span>
+        <span class="brand-name">Mike</span>
+      </div>
+      <span class="panel-icon" title="Toggle panel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="16" rx="2"/>
+          <line x1="9" y1="4" x2="9" y2="20"/>
+        </svg>
+      </span>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Assistant
+      </button>
+
+      <button class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        Projects
+      </button>
+
+      <button class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="9" y1="9" x2="9" y2="21"/>
+        </svg>
+        Tabular Review
+      </button>
+
+      <button class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="6" x2="4" y2="18"/>
+          <line x1="9" y1="4" x2="9" y2="20"/>
+          <line x1="14" y1="7" x2="14" y2="17"/>
+          <line x1="19" y1="5" x2="19" y2="19"/>
+        </svg>
+        Workflows
+      </button>
+    </nav>
+
+    <div class="section-label">
+      <span>Assistant History</span>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <div class="history-item">
+      <span>Car Wash Purchase Agreement</span>
+      <span class="dots">···</span>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="conversation">
+
+      <div class="msg-user">
+        <div class="bubble">
+          Edit the SPA to set the buyer as individuals Walter W. and the seller as
+          Bogdan B. and the date to 28 April 2026
+        </div>
+      </div>
+
+      <div class="spinner">✳️</div>
+
+      <div class="status-card">
+        <span>Completed in 3 steps</span>
+        <span class="chev">›</span>
+      </div>
+
+      <p class="para">
+        Now I have everything I need. I'll make all the necessary edits in one call —
+        updating the date, both party names in the preamble, the buyer's description from
+        "individual/entity" to "individual", and both names in the signature block.
+      </p>
+
+      <div class="status-card">
+        <span>Completed in 2 steps</span>
+        <span class="chev">›</span>
+      </div>
+
+      <p class="para">
+        Two signature block edits need more specific context. Let me re-apply those now.
+      </p>
+
+      <div class="work-card">
+        <div class="work-head">
+          <span>Working …</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+
+        <div class="work-step">
+          <span class="dot red"></span>
+          <span><span class="step-strong">Edit failed</span> Short Form Share Purchase Agreement.docx</span>
+        </div>
+
+        <div class="work-step">
+          <span class="dot grey"></span>
+          <span class="step-muted">Thought process ›</span>
+        </div>
+
+        <div class="work-step">
+          <span class="dot green"></span>
+          <span><span class="step-strong">Found "SELLER NAME" (1 match)</span>
+            <span class="step-muted">in Short Form Share Purchase Agreement.docx</span></span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

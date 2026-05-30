@@ -1,0 +1,28 @@
+# Trae Agent configuration used by /api/analyze.
+# The API key is intentionally a placeholder: resolution priority is CLI > ENV > Config,
+# so the route passes ANTHROPIC_API_KEY through the environment and that wins.
+agents:
+  trae_agent:
+    enable_lakeview: false
+    model: trae_agent_model
+    max_steps: 30
+    tools:
+      - bash
+      - str_replace_based_edit_tool
+      - task_done
+
+model_providers:
+  anthropic:
+    api_key: set_via_ANTHROPIC_API_KEY_env
+    provider: anthropic
+
+models:
+  trae_agent_model:
+    model_provider: anthropic
+    model: claude-sonnet-4-20250514
+    max_tokens: 4096
+    temperature: 0.3
+    top_p: 1
+    top_k: 0
+    max_retries: 6
+    parallel_tool_calls: true
