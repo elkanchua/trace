@@ -1,14 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProduct, conflicts, TEAMS, TEAM_META } from "@/lib/data";
+import { createGeneratedProduct, getProduct, conflicts, TEAMS, TEAM_META } from "@/lib/data";
 import { StatusBadge, Avatar, SeverityBadge } from "@/components/ui";
 import { FileTile } from "@/components/FileTile";
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = getProduct(params.id);
+function getSearchValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default function ProductDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams?: { name?: string | string[]; notion?: string | string[] };
+}) {
+  const generated = params.id === "generated-product";
+  const product =
+    getProduct(params.id) ??
+    (generated
+      ? createGeneratedProduct(
+          getSearchValue(searchParams?.name),
+          getSearchValue(searchParams?.notion),
+        )
+      : undefined);
+
   if (!product) notFound();
 
-  const productConflicts = conflicts.filter((c) => c.productId === product.id);
+  const productConflicts = generated ? [] : conflicts.filter((c) => c.productId === product.id);
 
   return (
     <div className="mx-auto max-w-[1100px] px-8 py-8">
@@ -40,6 +59,22 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           <span className="text-xs text-subtle">Your role · {product.myRole}</span>
         </div>
       </div>
+
+      {generated && (
+        <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
+          <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-emerald-800">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5">
+                <path d="m6 12.4 3.5 3.4L18 7.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            Product workspace created
+          </div>
+          <p className="mt-1.5 text-[12.5px] leading-relaxed text-emerald-900/75">
+            Trace linked the Notion PRD, generated an ERD draft, created starter GitHub files, and prepared blank Figma artifacts for the design team.
+          </p>
+        </div>
+      )}
 
       {/* Conflict strip */}
       {productConflicts.length > 0 && (
