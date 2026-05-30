@@ -14,7 +14,12 @@ export default function IntegrationsPage() {
         {integrations.map((i) => (
           <div key={i.name} className="flex items-center gap-3.5 rounded-2xl border border-white/60 bg-white/70 p-4 shadow-card backdrop-blur-md">
             <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-line bg-white">
-              <FileTypeIcon type={i.type} className="h-6 w-6 text-ink" />
+              {i.name === "Google Drive" ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src="/google-drive.png" alt="Google Drive" className="h-6 w-6 object-contain" />
+              ) : (
+                <FileTypeIcon type={i.type} className="h-6 w-6 text-ink" />
+              )}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
