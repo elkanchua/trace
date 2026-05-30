@@ -84,10 +84,92 @@ export const AVATARS: Record<string, string> = {
   "Lena Fischer": "/avatars/lena.jpg",
 };
 
+
+export function createGeneratedProduct(
+  name = "Nova Portal - Vendor Onboarding",
+  notionUrl = "",
+): Product {
+  const productName = name.trim() || "Untitled Product";
+  const prdName = `${productName} PRD`;
+
+  return {
+    id: "generated-product",
+    name: productName,
+    status: "Discovery",
+    summary:
+      "Generated from a Notion PRD with starter product, engineering, and design artifacts ready for the team to fill in.",
+    myRole: "PM",
+    conflicts: 0,
+    members: [
+      { name: currentUser.name, role: "PM", color: "bg-violet-500" },
+      { name: "Devon Clarke", role: "Designer", color: "bg-pink-500" },
+      { name: "Marcus Liu", role: "Engineer", color: "bg-emerald-500" },
+    ],
+    files: [
+      {
+        name: prdName,
+        type: "notion",
+        owner: currentUser.name,
+        team: "product",
+        updated: "Created just now",
+        content: notionUrl
+          ? `Linked Notion PRD: ${notionUrl}. Trace will use this document as the source for scope, requirements, and open questions.`
+          : "Linked Notion PRD used as the source for scope, requirements, and open questions.",
+      },
+      {
+        name: "Generated ERD - Draft",
+        type: "pdf",
+        owner: "Trace AI",
+        team: "product",
+        updated: "Created just now",
+        content:
+          "Draft entities, relationships, and ownership notes generated from the PRD. Ready for PM and engineering review.",
+      },
+      {
+        name: "nova-portal / README.md",
+        type: "github",
+        owner: "Marcus Liu",
+        team: "dev",
+        updated: "Created just now",
+        content:
+          "Empty starter repository with README, setup notes, and placeholder folders for API, web, and data model work.",
+      },
+      {
+        name: "nova-portal / schema.sql",
+        type: "github",
+        owner: "Marcus Liu",
+        team: "dev",
+        updated: "Created just now",
+        content:
+          "Generated schema placeholder based on the ERD draft. No production tables have been committed yet.",
+      },
+      {
+        name: "Vendor Onboarding - Flow Draft",
+        type: "figma",
+        owner: "Devon Clarke",
+        team: "design",
+        updated: "Created just now",
+        content:
+          "Starter Figma file with empty frames for onboarding, review, approval, and completion states.",
+      },
+      {
+        name: "Vendor Onboarding - Design Tokens",
+        type: "figma",
+        owner: "Devon Clarke",
+        team: "design",
+        updated: "Created just now",
+        content:
+          "Blank token and component page reserved for the design system pass.",
+      },
+    ],
+  };
+}
+
 const PM = "bg-violet-500";
 const DES = "bg-pink-500";
 const ENG = "bg-emerald-500";
 const LEGAL = "bg-amber-500";
+
 
 export const products: Product[] = [
   // ---------- Phase 1: Definition (product only) ----------

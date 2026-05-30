@@ -1,25 +1,48 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import {
   getProduct,
   conflicts,
   fileAnchor,
+  createGeneratedProduct,
   productActivity,
   TEAMS,
   TEAM_META,
   PHASE_META,
 } from "@/lib/data";
+
 import { StatusBadge, Avatar, SeverityBadge } from "@/components/ui";
 import { FileTile } from "@/components/FileTile";
 import { FileTypeIcon } from "@/components/icons";
 
 const shortName = (name: string) => (name.includes(" / ") ? name.split(" / ").pop()! : name);
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = getProduct(params.id);
+function getSearchValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default function ProductDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams?: { name?: string | string[]; notion?: string | string[] };
+}) {
+  const generated = params.id === "generated-product";
+  const product =
+    getProduct(params.id) ??
+    (generated
+      ? createGeneratedProduct(
+          getSearchValue(searchParams?.name),
+          getSearchValue(searchParams?.notion),
+        )
+      : undefined);
+
   if (!product) notFound();
 
-  const productConflicts = conflicts.filter((c) => c.productId === product.id);
+
+  const productConflicts = generated ? [] : conflicts.filter((c) => c.productId === product.id);
   const acts = productActivity(product.id);
   const phaseTeams = PHASE_META[product.phase].teams;
 
