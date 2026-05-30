@@ -64,8 +64,8 @@ export default function NewProductPage() {
   }, [generatedNotionUrl, notionUrl, router, stage, trimmedName]);
 
   const generateNotionPrd = () => {
+    // Mark the PRD as generated without opening a Notion tab.
     setNotionUrl(generatedNotionUrl);
-    window.open(generatedNotionUrl, "_blank", "noopener,noreferrer");
   };
 
   const createProduct = () => {
@@ -222,17 +222,12 @@ export default function NewProductPage() {
                 </p>
 
                 {prdLinked && (
-                  <a
-                    href={notionUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex max-w-full items-center gap-1.5 truncate rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:bg-canvas"
-                  >
-                    <span className="truncate">{notionUrl}</span>
+                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
                     <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5 flex-shrink-0">
-                      <path d="M14 4h6v6M10 14 20 4M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="m6 12.4 3.5 3.4L18 7.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </a>
+                    PRD generated
+                  </p>
                 )}
               </div>
             </div>
@@ -241,9 +236,10 @@ export default function NewProductPage() {
               <button
                 type="button"
                 onClick={generateNotionPrd}
-                className="rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:bg-canvas"
+                disabled={prdLinked}
+                className="rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-semibold text-ink hover:bg-canvas disabled:cursor-default disabled:opacity-60"
               >
-                {prdLinked ? "Open Notion PRD" : "Generate Notion PRD"}
+                {prdLinked ? "PRD generated" : "Generate Notion PRD"}
               </button>
             </div>
           </div>
